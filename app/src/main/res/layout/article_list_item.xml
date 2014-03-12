@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/jianshu_list_selector_holo_light"
+    android:padding="20dp"
+    >
+
+        <TextView
+            android:id="@+id/title"
+            android:text='广告时间'
+            android:textStyle="bold"
+            android:textColor="#3b3b3b"
+            android:textSize="26dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.makeramen.RoundedImageView
+            android:id="@+id/avatar"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/monk"
+            app:corner_radius="40dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp" />
+
+        <TextView
+            android:id="@+id/summary"
+            android:textColor="#717171"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+</LinearLayout>
