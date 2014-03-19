@@ -4,18 +4,23 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
   <style name="JianShu" parent="@style/_JianShu">
-        <item name="android:actionBarItemBackground">@drawable/selectable_background_jianshuactionbar</item>
-        <item name="android:popupMenuStyle">@style/PopupMenu.Jianshuactionbar</item>
-        <item name="android:dropDownListViewStyle">@style/DropDownListView.Jianshuactionbar</item>
-        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Jianshuactionbar</item>
-        <item name="android:actionDropDownStyle">@style/DropDownNav.Jianshuactionbar</item>
-        <item name="android:actionBarStyle">@style/ActionBar.Solid.Jianshuactionbar</item>
-        <item name="android:actionModeBackground">@drawable/cab_background_top_jianshuactionbar</item>
-        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_jianshuactionbar</item>
-        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Jianshuactionbar</item>
+    <item name="android:actionBarItemBackground">@drawable/selectable_background_jianshuactionbar
+    </item>
+    <item name="android:popupMenuStyle">@style/PopupMenu.Jianshuactionbar</item>
+    <item name="android:dropDownListViewStyle">@style/DropDownListView.Jianshuactionbar</item>
+    <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Jianshuactionbar</item>
+    <item name="android:actionDropDownStyle">@style/DropDownNav.Jianshuactionbar</item>
+    <item name="android:actionBarStyle">@style/ActionBar.Solid.Jianshuactionbar</item>
+    <item name="android:actionModeBackground">@drawable/cab_background_top_jianshuactionbar</item>
+    <item name="android:actionModeSplitBackground">
+      @drawable/cab_background_bottom_jianshuactionbar
+    </item>
+    <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Jianshuactionbar
+    </item>
+    <item name="ptrProgressBarColor">#e58c7c</item>
 
-                <!-- Light.DarkActionBar specific -->
-        <item name="android:actionBarWidgetTheme">@style/Theme.Jianshuactionbar.Widget</item>
+    <!-- Light.DarkActionBar specific -->
+    <item name="android:actionBarWidgetTheme">@style/Theme.Jianshuactionbar.Widget</item>
   </style>
 
   <style name="_JianShu" parent="android:Theme.Holo.Light.DarkActionBar">
@@ -51,9 +56,12 @@
 
     <item name="android:buttonStyleToggle">@style/ToggleJianShu</item>
 
-    <item name="android:listChoiceBackgroundIndicator">@drawable/jianshu_list_selector_holo_light</item>
+    <item name="android:listChoiceBackgroundIndicator">@drawable/jianshu_list_selector_holo_light
+    </item>
 
-    <item name="android:activatedBackgroundIndicator">@drawable/jianshu_activated_background_holo_light</item>
+    <item name="android:activatedBackgroundIndicator">
+      @drawable/jianshu_activated_background_holo_light
+    </item>
 
     <item name="android:fastScrollThumbDrawable">@drawable/jianshu_fastscroll_thumb_holo</item>
 
