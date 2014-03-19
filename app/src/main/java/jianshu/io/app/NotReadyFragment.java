@@ -11,28 +11,28 @@ import android.os.Bundle;
  */
 public class NotReadyFragment extends DialogFragment {
 
-    public static NotReadyFragment newInstance() {
-        return new NotReadyFragment();
-    }
+  public static NotReadyFragment newInstance() {
+    return new NotReadyFragment();
+  }
 
-    @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        return new AlertDialog.Builder(getActivity()).setTitle("界面维护中")
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
+  @Override
+  public Dialog onCreateDialog(Bundle savedInstanceState) {
+    return new AlertDialog.Builder(getActivity()).setTitle("界面维护中")
+        .setPositiveButton("OK",
+            new DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                            }
-                        })
-                .setNegativeButton("Cancel",
-                        new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialogInterface, int i) {
+              }
+            })
+        .setNegativeButton("Cancel",
+            new DialogInterface.OnClickListener() {
 
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
+              @Override
+              public void onClick(DialogInterface dialogInterface, int i) {
 
-                            }
-                        })
-                .create();
-    }
+              }
+            })
+        .create();
+  }
 }

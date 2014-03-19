@@ -3,13 +3,9 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="CheckedTextViewJianShu" parent="android:Widget.Holo.Light.CheckedTextView">
-      <item name="android:background">@drawable/jianshu_checkedtextview_holo_light</item>
-  </style>
-
   <style name="AutoCompleteTextViewJianShu" parent="android:Widget.Holo.Light.AutoCompleteTextView">
       <item name="android:dropDownSelector">@drawable/jianshu_list_selector_holo_light</item>
-      <item name="android:background">@drawable/jianshu_edit_text_holo_light</item>
+	    <item name="android:background">@drawable/jianshu_edit_text_holo_light</item>
   </style>
 
   <style name="ButtonJianShu" parent="android:Widget.Holo.Light.Button">
@@ -73,10 +69,6 @@
 
   <style name="ToggleJianShu" parent="android:Widget.Holo.Light.Button.Toggle">
       <item name="android:background">@drawable/jianshu_btn_toggle_holo_light</item>
-  </style>
-
-  <style name="ListViewJianShu" parent = "android:Widget.Holo.Light.ListView">
-      <item name="android:listSelector">@drawable/jianshu_list_selector_holo_light</item>
   </style>
 
 </resources>
