@@ -24,5 +24,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:19.0.1'
     compile 'com.makeramen:roundedimageview:1.2.4'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:library:+'
+    compile 'uk.co.androidalliance:edgeeffectoverride:1.0.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }

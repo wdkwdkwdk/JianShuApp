@@ -2,7 +2,6 @@ package jianshu.io.app;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ListFragment;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -16,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import uk.co.androidalliance.edgeeffectoverride.EdgeEffectListView;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -29,7 +29,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
     return new RecommendationFragment();
   }
 
-  ListView mListView;
+  EdgeEffectListView mListView;
   PullToRefreshLayout mPtrLayout;
 
   public RecommendationFragment() {
@@ -47,7 +47,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
     super.onActivityCreated(savedInstanceState);
 
     Activity activity = getActivity();
-    mListView = (ListView) (activity.findViewById(R.id.list));
+    mListView = (EdgeEffectListView) (activity.findViewById(R.id.list));
     mPtrLayout = (PullToRefreshLayout)(activity.findViewById(R.id.ptr_layout));
 
     ActionBarPullToRefresh.from(activity)
