@@ -8,7 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import uk.co.androidalliance.edgeeffectoverride.EdgeEffectListView;
+import jianshu.io.app.widget.EndlessListView;
+import jianshu.io.app.widget.EndlessListener;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -16,14 +17,15 @@ import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
 /**
  * Created by Administrator on 14-3-8.
  */
-public class RecommendationFragment extends Fragment implements OnRefreshListener {
+public class RecommendationFragment extends Fragment implements OnRefreshListener, EndlessListener {
 
   public static RecommendationFragment newInstance() {
     return new RecommendationFragment();
   }
 
-  EdgeEffectListView mListView;
+  EndlessListView mListView;
   PullToRefreshLayout mPtrLayout;
+  RecommendationAdapter mAdapter;
 
   public RecommendationFragment() {
 
@@ -40,7 +42,10 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
     super.onActivityCreated(savedInstanceState);
 
     Activity activity = getActivity();
-    mListView = (EdgeEffectListView) (activity.findViewById(R.id.list));
+    mListView = (EndlessListView) (activity.findViewById(R.id.list));
+    mListView.setListener(this);
+    View footer = activity.getLayoutInflater().inflate(R.layout.footer, null);
+    mListView.setFooter(footer);
     mPtrLayout = (PullToRefreshLayout)(activity.findViewById(R.id.ptr_layout));
 
     ActionBarPullToRefresh.from(activity)
@@ -53,9 +58,9 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
   public void onStart() {
     super.onStart();
 
-    RecommendationAdapter adapter = new RecommendationAdapter(getActivity(),
+    mAdapter = new RecommendationAdapter(getActivity(),
         R.layout.article_list_item, getData());
-    mListView.setAdapter(adapter);
+    mListView.setAdapter(mAdapter);
   }
 
   private RecommendationItem[] getData() {
@@ -92,6 +97,28 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
 
         // Notify PullToRefreshLayout that the refresh has finished
         mPtrLayout.setRefreshComplete();
+      }
+    }.execute();
+  }
+
+  @Override
+  public void onScrollEnd() {
+    new AsyncTask<Void, Void, Void>() {
+      @Override
+      protected Void doInBackground(Void... voids) {
+        try {
+          Thread.sleep(1000 * 2);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
+
+      @Override
+      protected void onPostExecute(Void aVoid) {
+        RecommendationItem[] newData = getData();
+        mAdapter.addAll(newData);
+        mListView.notifyNewDataLoaded();
       }
     }.execute();
   }
