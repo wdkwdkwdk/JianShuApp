@@ -10,6 +10,7 @@
   <!-- Your content, here we're using a ScrollView -->
 
   <jianshu.io.app.widget.EndlessListView
+      android:fastScrollEnabled="true"
       android:id="@+id/list"
       android:divider="@drawable/dash"
       android:dividerHeight="2dp"
