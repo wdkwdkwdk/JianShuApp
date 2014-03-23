@@ -11,10 +11,12 @@
 
   <jianshu.io.app.widget.EndlessListView
       android:id="@+id/list"
+      android:divider="@drawable/dash"
+      android:dividerHeight="2dp"
       app:edgeeffect_color="@color/jianshu"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
 
-  </jianshu.io.app.widget.EndlessListView>
 
+  </jianshu.io.app.widget.EndlessListView>
 </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>

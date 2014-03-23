@@ -58,4 +58,5 @@ public class RecommendationAdapter extends ArrayAdapter<RecommendationItem> {
     holder.summary.setText(item.getSummary());
     return rowView;
   }
+
 }
