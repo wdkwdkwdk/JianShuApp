@@ -1,4 +1,4 @@
-package jianshu.io.app;
+package module;
 
 import android.graphics.drawable.Drawable;
 
@@ -12,7 +12,7 @@ public class RecommendationItem {
     this.summary = summary;
   }
 
-  public String getTitle() {
+public String getTitle() {
     return title;
   }
 

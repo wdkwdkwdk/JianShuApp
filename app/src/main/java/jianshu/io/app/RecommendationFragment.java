@@ -2,14 +2,17 @@ package jianshu.io.app;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import jianshu.io.app.widget.EndlessListView;
 import jianshu.io.app.widget.EndlessListener;
+import module.RecommendationItem;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -41,13 +44,20 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    Activity activity = getActivity();
+    final Activity activity = getActivity();
     mListView = (EndlessListView) (activity.findViewById(R.id.list));
     mListView.setListener(this);
     View footer = activity.getLayoutInflater().inflate(R.layout.footer, null);
     mListView.setFooter(footer);
-    mPtrLayout = (PullToRefreshLayout)(activity.findViewById(R.id.ptr_layout));
+    mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+      @Override
+      public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        Intent intent = new Intent(activity, ArticleActivity.class);
+        startActivity(intent);
+      }
+    });
 
+    mPtrLayout = (PullToRefreshLayout)(activity.findViewById(R.id.ptr_layout));
     ActionBarPullToRefresh.from(activity)
         .allChildrenArePullable()
         .listener(this)

@@ -10,6 +10,7 @@
     <string name="drawer_open">open drawer</string>
     <string name="drawer_close">close drawer</string>
     <string name="title_activity_main_activity2">MainActivity</string>
-  <string name="loading">加载中...</string>
+    <string name="loading">加载中...</string>
+    <string name="title_activity_article">正文</string>
 
 </resources>
