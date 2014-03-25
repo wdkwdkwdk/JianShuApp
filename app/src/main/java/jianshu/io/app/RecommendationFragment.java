@@ -53,24 +53,19 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         Intent intent = new Intent(activity, ArticleActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
       }
     });
+    mAdapter = new RecommendationAdapter(getActivity(),
+        R.layout.article_list_item, getData());
+    mListView.setAdapter(mAdapter);
 
     mPtrLayout = (PullToRefreshLayout)(activity.findViewById(R.id.ptr_layout));
     ActionBarPullToRefresh.from(activity)
         .allChildrenArePullable()
         .listener(this)
         .setup(mPtrLayout);
-  }
-
-  @Override
-  public void onStart() {
-    super.onStart();
-
-    mAdapter = new RecommendationAdapter(getActivity(),
-        R.layout.article_list_item, getData());
-    mListView.setAdapter(mAdapter);
   }
 
   private RecommendationItem[] getData() {
