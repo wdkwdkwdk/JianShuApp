@@ -9,6 +9,8 @@
           <set>
             <option value="E:\AndroidStudioProjects\JianShuApp" />
             <option value="E:\AndroidStudioProjects\JianShuApp\app" />
+            <option value="E:\AndroidStudioProjects\JianShuApp\libraries" />
+            <option value="E:\AndroidStudioProjects\JianShuApp\libraries\SwipeBackLayout" />
           </set>
         </option>
       </GradleProjectSettings>

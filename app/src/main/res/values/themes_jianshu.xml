@@ -4,6 +4,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
   <style name="JianShu" parent="@style/_JianShu">
+    <item name="android:windowIsTranslucent">true</item>
     <item name="android:actionBarItemBackground">@drawable/selectable_background_jianshuactionbar
     </item>
     <item name="android:popupMenuStyle">@style/PopupMenu.Jianshuactionbar</item>

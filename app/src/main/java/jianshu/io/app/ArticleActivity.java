@@ -1,17 +1,19 @@
 package jianshu.io.app;
 
 import android.app.ActionBar;
-import android.app.Activity;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
 
+import me.imid.swipebacklayout.lib.SwipeBackLayout;
+import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
-public class ArticleActivity extends Activity {
+
+public class ArticleActivity extends SwipeBackActivity {
 
   private WebView mWebView;
+  private SwipeBackLayout mSwipeBackLayout;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -23,6 +25,9 @@ public class ArticleActivity extends Activity {
 
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
+
+    mSwipeBackLayout = getSwipeBackLayout();
+    mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
   }
 
 
