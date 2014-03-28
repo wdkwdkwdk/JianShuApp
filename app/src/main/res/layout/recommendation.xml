@@ -7,8 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-  <!-- Your content, here we're using a ScrollView -->
-
   <jianshu.io.app.widget.EndlessListView
       android:fastScrollEnabled="true"
       android:id="@+id/list"
@@ -17,7 +15,6 @@
       app:edgeeffect_color="@color/jianshu"
       android:layout_width="match_parent"
       android:layout_height="match_parent">
-
-
   </jianshu.io.app.widget.EndlessListView>
+
 </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
