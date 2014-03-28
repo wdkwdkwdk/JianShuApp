@@ -55,6 +55,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
         Intent intent = new Intent(activity, ArticleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         startActivity(intent);
+        activity.overridePendingTransition(R.anim.slide_in_left, 0);
       }
     });
     mAdapter = new RecommendationAdapter(getActivity(),
