@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.widget.TextView;
 
 /**
@@ -35,34 +34,6 @@ public class LoadingTextView extends TextView{
 
   public void endAnimation() {
     mAnim.end();
-  }
-
-  @Override
-  protected void onAttachedToWindow() {
-    super.onAttachedToWindow();
-    mAnim.start();
-  }
-
-  @Override
-  protected void onDetachedFromWindow() {
-    super.onDetachedFromWindow();
-    mAnim.end();
-  }
-
-  @Override
-  public void onStartTemporaryDetach() {
-    super.onStartTemporaryDetach();
-    mAnim.end();
-  }
-
-  @Override
-  protected void onVisibilityChanged(View changedView, int visibility) {
-    super.onVisibilityChanged(changedView, visibility);
-    if(visibility == View.GONE || visibility == View.INVISIBLE) {
-      mAnim.end();
-    } else {
-      mAnim.start();
-    }
   }
 
   private void init() {

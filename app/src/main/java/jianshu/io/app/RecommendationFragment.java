@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 
 import jianshu.io.app.widget.EndlessListView;
 import jianshu.io.app.widget.EndlessListener;
+import jianshu.io.app.widget.LoadingTextView;
 import module.RecommendationItem;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
@@ -29,6 +30,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
   EndlessListView mListView;
   PullToRefreshLayout mPtrLayout;
   RecommendationAdapter mAdapter;
+  LoadingTextView mFooter;
 
   public RecommendationFragment() {
 
@@ -48,8 +50,8 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
 
     mListView = (EndlessListView) (activity.findViewById(R.id.list));
     mListView.setListener(this);
-    View footer = activity.getLayoutInflater().inflate(R.layout.footer, null);
-    mListView.setFooter(footer);
+    mFooter = (LoadingTextView) activity.getLayoutInflater().inflate(R.layout.footer, null);
+    mListView.setFooter(mFooter);
     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -110,6 +112,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
 
   @Override
   public void onScrollEnd() {
+    mFooter.startAnimation();
     new AsyncTask<Void, Void, Void>() {
       @Override
       protected Void doInBackground(Void... voids) {
@@ -124,6 +127,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
       @Override
       protected void onPostExecute(Void aVoid) {
         RecommendationItem[] newData = getData();
+        mFooter.endAnimation();
         mAdapter.addAll(newData);
         mListView.notifyNewDataLoaded();
       }
