@@ -2,20 +2,28 @@ package jianshu.io.app;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
 
+import jianshu.io.app.widget.LoadingTextView;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
 import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 
 
 public class ArticleActivity extends SwipeBackActivity {
 
+  private LoadingTextView mLoadingArticle;
   private WebView mWebView;
+  private Button mRetryButton;
   private SwipeBackLayout mSwipeBackLayout;
+  private boolean hasError;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -23,9 +31,49 @@ public class ArticleActivity extends SwipeBackActivity {
     setContentView(R.layout.activity_article);
 
     Intent intent = getIntent();
-    String url = intent.getStringExtra("url");
+    final String url = intent.getStringExtra("url");
+    mLoadingArticle = (LoadingTextView)findViewById(R.id.loading_article);
     mWebView = (WebView)findViewById(R.id.web);
+    mRetryButton = (Button)findViewById(R.id.retry);
+
+    mWebView.setWebViewClient(new WebViewClient() {
+      @Override
+      public void onPageStarted(WebView view, String url, Bitmap favicon) {
+        if(hasError) {
+          return;
+        }
+        hasError = false;
+        mLoadingArticle.setVisibility(View.VISIBLE);
+        mLoadingArticle.startAnimation();
+        mWebView.setVisibility(View.INVISIBLE);
+        mRetryButton.setVisibility(View.INVISIBLE);
+      }
+
+      @Override
+      public void onPageFinished(WebView view, String url) {
+        mLoadingArticle.endAnimation();
+        mLoadingArticle.setVisibility(View.INVISIBLE);
+        if(!hasError) {
+          mWebView.setVisibility(View.VISIBLE);
+        } else {
+          mRetryButton.setVisibility(View.VISIBLE);
+        }
+      }
+
+      @Override
+      public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
+        hasError = true;
+      }
+    });
     mWebView.loadUrl(url);
+
+    mRetryButton.setOnClickListener(new Button.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        hasError = false;
+        mWebView.loadUrl(url);
+      }
+    });
 
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
@@ -34,6 +82,13 @@ public class ArticleActivity extends SwipeBackActivity {
     mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
   }
 
+  @Override
+  protected void onPause() {
+    super.onPause();
+    if(mLoadingArticle.getVisibility() == View.VISIBLE) {
+      mLoadingArticle.endAnimation();
+    }
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {

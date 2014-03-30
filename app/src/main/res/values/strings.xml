@@ -12,5 +12,6 @@
     <string name="title_activity_main_activity2">MainActivity</string>
     <string name="loading">加载中...</string>
     <string name="title_activity_article">正文</string>
+  <string name="retry">重试</string>
 
 </resources>

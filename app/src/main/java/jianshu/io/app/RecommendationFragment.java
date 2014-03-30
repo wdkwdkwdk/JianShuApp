@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import java.io.IOException;
 
@@ -123,6 +124,8 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
         if(data != null) {
           mAdapter.clear();
           mAdapter.addAll(data);
+        } else {
+          Toast.makeText(RecommendationFragment.this.getActivity(), ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
         }
       }
     }).execute();
@@ -143,6 +146,8 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
         mListView.notifyNewDataLoaded();
         if (data != null) {
           mAdapter.addAll(data);
+        } else {
+          Toast.makeText(RecommendationFragment.this.getActivity(), ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
         }
       }
     }).execute();
