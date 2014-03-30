@@ -38,6 +38,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
@@ -355,7 +356,7 @@ public class FinalBitmap {
 	       
 			if(imageView instanceof ImageView){
 				((ImageView)imageView).setImageDrawable(asyncDrawable);
-			}else{
+      }else{
 				imageView.setBackgroundDrawable(asyncDrawable);
 			}
 	        
@@ -615,7 +616,7 @@ public class FinalBitmap {
 		}
 		
 		
-		private static class AsyncDrawable extends BitmapDrawable {
+		public static class AsyncDrawable extends BitmapDrawable {
 			private final WeakReference<BitmapLoadAndDisplayTask> bitmapWorkerTaskReference;
 
 			public AsyncDrawable(Resources res, Bitmap bitmap,BitmapLoadAndDisplayTask bitmapWorkerTask) {

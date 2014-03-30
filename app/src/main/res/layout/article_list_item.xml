@@ -18,10 +18,9 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
 
-  <com.makeramen.RoundedImageView
+  <jianshu.io.app.widget.AfinalRoundedImageView
       android:id="@+id/avatar"
       android:layout_alignParentRight="true"
-      android:src="@drawable/monk"
       app:corner_radius="40dp"
       android:layout_width="40dp"
       android:layout_height="40dp"/>

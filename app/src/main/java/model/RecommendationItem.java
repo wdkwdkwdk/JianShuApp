@@ -1,14 +1,12 @@
-package module;
-
-import android.graphics.drawable.Drawable;
+package model;
 
 /**
  * Created by Administrator on 14-3-21.
  */
 public class RecommendationItem {
-  public RecommendationItem(String title, Drawable avatar, String summary) {
+  public RecommendationItem(String title, String avatar, String summary) {
     this.title = title;
-    this.avatar = avatar;
+    this.avatar = avatar;;
     this.summary = summary;
   }
 
@@ -20,11 +18,11 @@ public String getTitle() {
     return summary;
   }
 
-  public Drawable getAvatar() {
+  public String getAvatar() {
     return avatar;
   }
 
   private String title;
-  private Drawable avatar;
+  private String avatar;
   private String summary;
 }

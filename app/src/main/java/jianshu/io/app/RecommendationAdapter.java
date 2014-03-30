@@ -8,7 +8,9 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import module.RecommendationItem;
+import net.tsz.afinal.FinalBitmap;
+
+import model.RecommendationItem;
 
 /**
  * Created by Administrator on 14-3-21.
@@ -23,18 +25,23 @@ public class RecommendationAdapter extends ArrayAdapter<RecommendationItem> {
 
   Activity context;
   int resource;
+  FinalBitmap fb;
 
   public RecommendationAdapter(Activity context, int resource) {
     super(context, resource);
-    this.context = context;
-    this.resource = resource;
+    init(context, resource);
   }
 
   public RecommendationAdapter(Activity context, int resource, RecommendationItem[] items) {
     super(context, resource);
+    init(context, resource);
+    this.addAll(items);
+  }
+
+  private void init(Activity context, int resource) {
     this.context = context;
     this.resource = resource;
-    this.addAll(items);
+    this.fb = FinalBitmap.create(context);
   }
 
   @Override
@@ -55,7 +62,7 @@ public class RecommendationAdapter extends ArrayAdapter<RecommendationItem> {
     }
     RecommendationItem item = this.getItem(position);
     holder.title.setText(item.getTitle());
-    holder.avatar.setImageDrawable(item.getAvatar());
+    this.fb.display(holder.avatar, item.getAvatar());
     holder.summary.setText(item.getSummary());
     return rowView;
   }

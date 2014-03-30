@@ -10,10 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
+import java.io.IOException;
+
 import jianshu.io.app.widget.EndlessListView;
 import jianshu.io.app.widget.EndlessListener;
 import jianshu.io.app.widget.LoadingTextView;
-import module.RecommendationItem;
+import model.HomePageDataPool;
+import model.RecommendationItem;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -31,9 +34,10 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
   PullToRefreshLayout mPtrLayout;
   RecommendationAdapter mAdapter;
   LoadingTextView mFooter;
+  HomePageDataPool mPool;
 
   public RecommendationFragment() {
-
+    mPool = new HomePageDataPool();
   }
 
   @Override
@@ -62,7 +66,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
       }
     });
     mAdapter = new RecommendationAdapter(getActivity(),
-        R.layout.article_list_item, getData());
+        R.layout.article_list_item);
     mListView.setAdapter(mAdapter);
 
     mPtrLayout = (PullToRefreshLayout) (activity.findViewById(R.id.ptr_layout));
@@ -70,67 +74,67 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
         .allChildrenArePullable()
         .listener(this)
         .setup(mPtrLayout);
+
+    mPtrLayout.setRefreshing(true);
+    onRefreshStarted(null);
   }
 
-  private RecommendationItem[] getData() {
-    int count = 10;
-    RecommendationItem[] result = new RecommendationItem[count];
-    for (int i = 0; i < count; i++) {
-      result[i] = new RecommendationItem("管理者，别让下属害怕",
-          getResources().getDrawable(R.drawable.monk),
-          "我一直还算欣赏大张伟的幽默和精灵，笑的时候大笑，说的时候也不遮遮掩掩，就像一个不懂事的孩子 ，没什么礼貌，就是贪玩，大人越不让他说什么他就越晒脸，口无遮拦，让人哭笑不得。当然， 接下来说的不是大张伟，而是他在微博上嘴贱的说过的一句话、“韩国歌曲的MV就是给女人看的毛 片。” ...");
+  private RecommendationItem[] getData() throws IOException {
+    return mPool.refresh();
+  }
+
+  class RecommendationAsyncTask extends AsyncTask<Void, Void, RecommendationItem[]> {
+
+    private OnPostExecuteTask task;
+
+    public RecommendationAsyncTask(OnPostExecuteTask task) {
+      this.task = task;
     }
-    return result;
+
+    @Override
+    protected RecommendationItem[] doInBackground(Void... params) {
+      try {
+        return RecommendationFragment.this.getData();
+      } catch (IOException e) {
+        return null;
+      }
+    }
+
+    @Override
+    protected void onPostExecute(RecommendationItem[] data) {
+      this.task.run(data);
+    }
+  }
+
+  interface OnPostExecuteTask {
+    void run(RecommendationItem[] data);
   }
 
   @Override
   public void onRefreshStarted(View view) {
-    /**
-     * Simulate Refresh with 4 seconds sleep
-     */
-    new AsyncTask<Void, Void, Void>() {
-
+    new RecommendationAsyncTask(new OnPostExecuteTask() {
       @Override
-      protected Void doInBackground(Void... params) {
-        try {
-          Thread.sleep(1000 * 2);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        return null;
-      }
-
-      @Override
-      protected void onPostExecute(Void result) {
-        super.onPostExecute(result);
-
-        // Notify PullToRefreshLayout that the refresh has finished
+      public void run(RecommendationItem[] data) {
         mPtrLayout.setRefreshComplete();
+        if(data != null) {
+          mAdapter.clear();
+          mAdapter.addAll(data);
+        }
       }
-    }.execute();
+    }).execute();
   }
 
   @Override
   public void onScrollEnd() {
-    mFooter.startAnimation();
-    new AsyncTask<Void, Void, Void>() {
-      @Override
-      protected Void doInBackground(Void... voids) {
-        try {
-          Thread.sleep(1000 * 2);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-        return null;
-      }
-
-      @Override
-      protected void onPostExecute(Void aVoid) {
-        RecommendationItem[] newData = getData();
-        mFooter.endAnimation();
-        mAdapter.addAll(newData);
-        mListView.notifyNewDataLoaded();
-      }
-    }.execute();
+//    mFooter.startAnimation();
+//    new RecommendationAsyncTask(new OnPostExecuteTask() {
+//      @Override
+//      public void run(RecommendationItem[] data) {
+//        mFooter.startAnimation();
+//        if (data != null) {
+//          mAdapter.addAll(data);
+//        }
+//      }
+//    }).execute();
   }
 }

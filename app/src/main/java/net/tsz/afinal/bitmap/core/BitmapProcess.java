@@ -15,10 +15,12 @@
  */
 package net.tsz.afinal.bitmap.core;
 
-import net.tsz.afinal.bitmap.core.BytesBufferPool.BytesBuffer;
-import net.tsz.afinal.bitmap.download.Downloader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
+
+import net.tsz.afinal.bitmap.core.BytesBufferPool.BytesBuffer;
+import net.tsz.afinal.bitmap.download.Downloader;
 
 public class BitmapProcess {
 	private Downloader mDownloader;
@@ -40,6 +42,7 @@ public class BitmapProcess {
 		if(bitmap == null){
 			byte[] data = mDownloader.download(url);
 			if(data != null && data.length > 0){
+        Log.d("afinal", String.format("downloaded! url: %s", url));
 				if(config !=null)
 					bitmap =  BitmapDecoder.decodeSampledBitmapFromByteArray(data,0,data.length,config.getBitmapWidth(),config.getBitmapHeight());
 				else
