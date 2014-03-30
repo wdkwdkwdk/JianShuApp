@@ -1,6 +1,7 @@
 package jianshu.io.app;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.tsz.afinal.FinalBitmap;
+import net.tsz.afinal.bitmap.core.BitmapDecorator;
 
 import model.RecommendationItem;
 
@@ -42,6 +44,20 @@ public class RecommendationAdapter extends ArrayAdapter<RecommendationItem> {
     this.context = context;
     this.resource = resource;
     this.fb = FinalBitmap.create(context);
+    this.fb.configBitmapDecorator(new BitmapDecorator() {
+      @Override
+      public Bitmap decorate(Bitmap bm) {
+        int width = bm.getWidth();
+        int height = bm.getHeight();
+        if(width != height) {
+          int base = width <= height ? width : height;
+          int startX = (width - base) / 2;
+          int startY = (height - base) / 2;
+          bm = bm.createBitmap(bm, startX, startY, base, base);
+        }
+        return bm;
+      }
+    });
   }
 
   @Override

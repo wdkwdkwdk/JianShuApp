@@ -25,6 +25,7 @@ import net.tsz.afinal.bitmap.download.Downloader;
 public class BitmapProcess {
 	private Downloader mDownloader;
 	private BitmapCache mCache;
+  private BitmapDecorator mDecorator;
 	
 	private static final int BYTESBUFFE_POOL_SIZE = 4;
     private static final int BYTESBUFFER_SIZE = 200 * 1024;
@@ -34,6 +35,12 @@ public class BitmapProcess {
 		this.mDownloader = downloader;
 		this.mCache = cache;
 	}
+
+  public BitmapProcess(Downloader downloader,BitmapCache cache, BitmapDecorator decorator) {
+    this.mDownloader = downloader;
+    this.mCache = cache;
+    this.mDecorator = decorator;
+  }
 
 	public Bitmap getBitmap(String url, BitmapDisplayConfig config) {
 		
@@ -51,7 +58,10 @@ public class BitmapProcess {
 				mCache.addToDiskCache(url, data);
 			}
 		}
-		
+
+    if(mDecorator != null) {
+      bitmap = mDecorator.decorate(bitmap);
+    }
 		return bitmap;
 	}
 	

@@ -15,21 +15,6 @@
  */
 package net.tsz.afinal;
 
-import java.lang.ref.WeakReference;
-import java.util.HashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
-
-import net.tsz.afinal.bitmap.core.BitmapCache;
-import net.tsz.afinal.bitmap.core.BitmapDisplayConfig;
-import net.tsz.afinal.bitmap.core.BitmapProcess;
-import net.tsz.afinal.bitmap.display.Displayer;
-import net.tsz.afinal.bitmap.display.SimpleDisplayer;
-import net.tsz.afinal.bitmap.download.Downloader;
-import net.tsz.afinal.bitmap.download.SimpleDownloader;
-import net.tsz.afinal.core.AsyncTask;
-import net.tsz.afinal.utils.Utils;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -38,11 +23,28 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 
+import net.tsz.afinal.bitmap.core.BitmapCache;
+import net.tsz.afinal.bitmap.core.BitmapDecorator;
+import net.tsz.afinal.bitmap.core.BitmapDisplayConfig;
+import net.tsz.afinal.bitmap.core.BitmapProcess;
+import net.tsz.afinal.bitmap.display.Displayer;
+import net.tsz.afinal.bitmap.display.SimpleDisplayer;
+import net.tsz.afinal.bitmap.download.Downloader;
+import net.tsz.afinal.bitmap.download.SimpleDownloader;
+import net.tsz.afinal.core.AsyncTask;
+import net.tsz.afinal.utils.Utils;
+
+import java.lang.ref.WeakReference;
+import java.util.HashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 public class FinalBitmap {
+  private BitmapDecorator mDecorator;
 	private FinalBitmapConfig mConfig;
 	private BitmapCache mImageCache;
 	private BitmapProcess mBitmapProcess;
@@ -75,8 +77,11 @@ public class FinalBitmap {
 		}
 		return mFinalBitmap;
 	}
-	
-	
+
+	public FinalBitmap configBitmapDecorator(BitmapDecorator decorator) {
+    mDecorator = decorator;
+    return this;
+  }
 	
 	/**
 	 * 设置图片正在加载的时候显示的图片
@@ -251,7 +256,7 @@ public class FinalBitmap {
 			});
 			
 			//init BitmapProcess
-			mBitmapProcess = new BitmapProcess(mConfig.downloader,mImageCache);
+			mBitmapProcess = new BitmapProcess(mConfig.downloader, mImageCache, mDecorator);
 			
 			mInit = true ;
 		}
