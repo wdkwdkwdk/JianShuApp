@@ -59,8 +59,10 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
     mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
       @Override
       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        RecommendationItem item = mAdapter.getItem((int)l);
         Intent intent = new Intent(activity, ArticleActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra("url", item.getUrl());
         startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in_left, 0);
       }
@@ -79,22 +81,24 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
     onRefreshStarted(null);
   }
 
-  private RecommendationItem[] getData() throws IOException {
-    return mPool.refresh();
-  }
-
   class RecommendationAsyncTask extends AsyncTask<Void, Void, RecommendationItem[]> {
 
+    private boolean isRefresh;
     private OnPostExecuteTask task;
 
-    public RecommendationAsyncTask(OnPostExecuteTask task) {
+    public RecommendationAsyncTask(boolean isRefresh, OnPostExecuteTask task) {
+      this.isRefresh = isRefresh;
       this.task = task;
     }
 
     @Override
     protected RecommendationItem[] doInBackground(Void... params) {
       try {
-        return RecommendationFragment.this.getData();
+        if(this.isRefresh) {
+          return RecommendationFragment.this.mPool.refresh();
+        } else {
+          return RecommendationFragment.this.mPool.pull();
+        }
       } catch (IOException e) {
         return null;
       }
@@ -112,7 +116,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
 
   @Override
   public void onRefreshStarted(View view) {
-    new RecommendationAsyncTask(new OnPostExecuteTask() {
+    new RecommendationAsyncTask(true, new OnPostExecuteTask() {
       @Override
       public void run(RecommendationItem[] data) {
         mPtrLayout.setRefreshComplete();
@@ -125,16 +129,22 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
   }
 
   @Override
+  public boolean isAtTheEnd() {
+    return mPool.isAtTheEnd();
+  }
+
+  @Override
   public void onScrollEnd() {
-//    mFooter.startAnimation();
-//    new RecommendationAsyncTask(new OnPostExecuteTask() {
-//      @Override
-//      public void run(RecommendationItem[] data) {
-//        mFooter.startAnimation();
-//        if (data != null) {
-//          mAdapter.addAll(data);
-//        }
-//      }
-//    }).execute();
+    mFooter.startAnimation();
+    new RecommendationAsyncTask(false, new OnPostExecuteTask() {
+      @Override
+      public void run(RecommendationItem[] data) {
+        mFooter.endAnimation();
+        mListView.notifyNewDataLoaded();
+        if (data != null) {
+          mAdapter.addAll(data);
+        }
+      }
+    }).execute();
   }
 }

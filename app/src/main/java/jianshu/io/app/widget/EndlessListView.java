@@ -53,7 +53,7 @@ public class EndlessListView extends EdgeEffectListView implements AbsListView.O
     }
 
     int l = visibleItemCount + firstVisibleItem;
-    if(l >= totalItemCount && !isLoading) {
+    if(l >= totalItemCount && !isLoading && !this.listener.isAtTheEnd()) {
       this.addFooterView(this.footer);
       this.isLoading = true;
       this.listener.onScrollEnd();

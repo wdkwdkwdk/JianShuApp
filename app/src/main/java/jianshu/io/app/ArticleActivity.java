@@ -1,6 +1,7 @@
 package jianshu.io.app;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
@@ -21,8 +22,10 @@ public class ArticleActivity extends SwipeBackActivity {
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_article);
 
+    Intent intent = getIntent();
+    String url = intent.getStringExtra("url");
     mWebView = (WebView)findViewById(R.id.web);
-    mWebView.loadUrl("http://jianshu.io/p/083f9dc0f2fe");
+    mWebView.loadUrl(url);
 
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
