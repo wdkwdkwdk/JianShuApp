@@ -17,7 +17,7 @@
       android:layout_width="fill_parent"
       android:layout_height="fill_parent"/>
 
-    <WebView
+  <WebView
         android:visibility="invisible"
         android:id="@+id/web"
         android:layout_width="fill_parent"

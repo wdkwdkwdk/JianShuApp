@@ -11,6 +11,7 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.ShareActionProvider;
 
 import jianshu.io.app.widget.LoadingTextView;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -20,10 +21,14 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 public class ArticleActivity extends SwipeBackActivity {
 
   private LoadingTextView mLoadingArticle;
+  private String mUrl;
+  private String mTitle;
+  private String mSummary;
   private WebView mWebView;
   private Button mRetryButton;
   private SwipeBackLayout mSwipeBackLayout;
   private boolean hasError;
+  private ShareActionProvider mShareActionProvider;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +36,9 @@ public class ArticleActivity extends SwipeBackActivity {
     setContentView(R.layout.activity_article);
 
     Intent intent = getIntent();
-    final String url = intent.getStringExtra("url");
+    mUrl = intent.getStringExtra("url");
+    mTitle = intent.getStringExtra("title");
+    mSummary = intent.getStringExtra("summary");
     mLoadingArticle = (LoadingTextView)findViewById(R.id.loading_article);
     mWebView = (WebView)findViewById(R.id.web);
     mRetryButton = (Button)findViewById(R.id.retry);
@@ -71,13 +78,13 @@ public class ArticleActivity extends SwipeBackActivity {
         hasError = true;
       }
     });
-    mWebView.loadUrl(url);
+    mWebView.loadUrl(mUrl);
 
     mRetryButton.setOnClickListener(new Button.OnClickListener() {
       @Override
       public void onClick(View v) {
         hasError = false;
-        mWebView.loadUrl(url);
+        mWebView.loadUrl(mUrl);
       }
     });
 
@@ -101,9 +108,27 @@ public class ArticleActivity extends SwipeBackActivity {
 
     // Inflate the menu; this adds items to the action bar if it is present.
     getMenuInflater().inflate(R.menu.article, menu);
+    MenuItem item = menu.findItem(R.id.menu_item_share);
+    mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+    Intent shareIntent = new Intent();
+    shareIntent.setAction(Intent.ACTION_SEND);
+    shareIntent.putExtra(Intent.EXTRA_TITLE, mTitle);
+    shareIntent.putExtra(Intent.EXTRA_TEXT, getSharedContent());
+    shareIntent.putExtra(Intent.EXTRA_ORIGINATING_URI, mUrl);
+    shareIntent.setType("text/plain");
+    setShareIntent(shareIntent);
     return true;
   }
 
+  private String getSharedContent() {
+    return String.format("%s %s (%s)", mTitle, mUrl, "分享自社科院的简书");
+  }
+
+  private void setShareIntent(Intent shareIntent) {
+    if (mShareActionProvider != null) {
+      mShareActionProvider.setShareIntent(shareIntent);
+    }
+  }
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     // Handle action bar item clicks here. The action bar will
