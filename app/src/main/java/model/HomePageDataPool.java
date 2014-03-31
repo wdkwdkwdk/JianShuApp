@@ -21,6 +21,7 @@ public class HomePageDataPool {
   protected final static String CONTENT_SELECTOR = "a.content";
   protected final static String LOAD_MORE_SELECTOR = "div.load-more button";
   protected final static String URL_SELECTOR = "a.content";
+  protected final static String AUTHOR_SELECTOR = "a.author";
 
   private boolean mIsAtTheEnd;
   private String mLoadMoreUrl;
@@ -89,6 +90,8 @@ public class HomePageDataPool {
     String content = contentEl.text();
     Element urlEl = el.select(URL_SELECTOR).get(0);
     String url = HOME_PAGE_URL + urlEl.attr("href");
-    return new RecommendationItem(title, avatarUrl, content, url);
+    Element authorEl = el.select(AUTHOR_SELECTOR).get(0);
+    String author = authorEl.text();
+    return new RecommendationItem(title, avatarUrl, content, url, author);
   }
 }

@@ -65,6 +65,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
         intent.putExtra("url", item.getUrl());
         intent.putExtra("title", item.getTitle());
         intent.putExtra("summary", item.getSummary());
+        intent.putExtra("author", item.getAuthor());
         startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in_left, 0);
       }

@@ -23,6 +23,7 @@ public class RecommendationAdapter extends ArrayAdapter<RecommendationItem> {
     TextView title;
     ImageView avatar;
     TextView summary;
+    TextView author;
   }
 
   Activity context;
@@ -71,6 +72,7 @@ public class RecommendationAdapter extends ArrayAdapter<RecommendationItem> {
       holder.title = (TextView)rowView.findViewById(R.id.title);
       holder.avatar = (ImageView)rowView.findViewById(R.id.avatar);
       holder.summary = (TextView)rowView.findViewById(R.id.summary);
+      holder.author = (TextView)rowView.findViewById(R.id.author);
       rowView.setTag(holder);
     }
     else {
@@ -80,6 +82,7 @@ public class RecommendationAdapter extends ArrayAdapter<RecommendationItem> {
     holder.title.setText(item.getTitle());
     this.fb.display(holder.avatar, item.getAvatar());
     holder.summary.setText(item.getSummary());
+    holder.author.setText(item.getAuthor());
     return rowView;
   }
 

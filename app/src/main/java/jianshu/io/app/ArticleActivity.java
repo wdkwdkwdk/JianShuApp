@@ -24,6 +24,7 @@ public class ArticleActivity extends SwipeBackActivity {
   private String mUrl;
   private String mTitle;
   private String mSummary;
+  private String mAuthor;
   private WebView mWebView;
   private Button mRetryButton;
   private SwipeBackLayout mSwipeBackLayout;
@@ -39,6 +40,7 @@ public class ArticleActivity extends SwipeBackActivity {
     mUrl = intent.getStringExtra("url");
     mTitle = intent.getStringExtra("title");
     mSummary = intent.getStringExtra("summary");
+    mAuthor = intent.getStringExtra("author");
     mLoadingArticle = (LoadingTextView)findViewById(R.id.loading_article);
     mWebView = (WebView)findViewById(R.id.web);
     mRetryButton = (Button)findViewById(R.id.retry);
@@ -121,7 +123,7 @@ public class ArticleActivity extends SwipeBackActivity {
   }
 
   private String getSharedContent() {
-    return String.format("%s %s (%s)", mTitle, mUrl, "分享自社科院的简书");
+    return String.format("《%s》 by %s %s (%s)", mTitle, mAuthor, mUrl, "分享自社科院的简书");
   }
 
   private void setShareIntent(Intent shareIntent) {

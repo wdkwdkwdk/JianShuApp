@@ -18,12 +18,25 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"/>
 
-  <jianshu.io.app.widget.AfinalRoundedImageView
-      android:id="@+id/avatar"
-      android:layout_alignParentRight="true"
-      app:corner_radius="40dp"
-      android:layout_width="40dp"
-      android:layout_height="40dp"/>
+  <RelativeLayout
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content">
+
+    <jianshu.io.app.widget.AfinalRoundedImageView
+        android:id="@+id/avatar"
+        app:corner_radius="40dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"/>
+
+    <TextView
+        android:paddingLeft="10dp"
+        android:layout_toRightOf="@id/avatar"
+        android:layout_centerVertical="true"
+        android:id="@+id/author"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+  </RelativeLayout>
 
   <TextView
       android:id="@+id/summary"
