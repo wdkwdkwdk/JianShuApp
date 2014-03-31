@@ -36,6 +36,7 @@ public class ArticleActivity extends SwipeBackActivity {
     mWebView = (WebView)findViewById(R.id.web);
     mRetryButton = (Button)findViewById(R.id.retry);
 
+    mWebView.getSettings().setJavaScriptEnabled(true);
     mWebView.setWebViewClient(new WebViewClient() {
       @Override
       public void onPageStarted(WebView view, String url, Bitmap favicon) {
@@ -55,6 +56,11 @@ public class ArticleActivity extends SwipeBackActivity {
         mLoadingArticle.setVisibility(View.INVISIBLE);
         if(!hasError) {
           mWebView.setVisibility(View.VISIBLE);
+          mWebView.loadUrl("javascript:$('div.navbar').remove()");
+          mWebView.loadUrl("javascript:$('div.wrap-btn').remove()");
+          mWebView.loadUrl("javascript:$('a.notebooks-menu-btn').remove()");
+          mWebView.loadUrl("javascript:$('div.article').css('margin-top', '0px')");
+          mWebView.loadUrl("javascript:$('div.preview').css('padding-top', '0px')");
         } else {
           mRetryButton.setVisibility(View.VISIBLE);
         }
