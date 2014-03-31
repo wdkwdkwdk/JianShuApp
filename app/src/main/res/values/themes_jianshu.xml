@@ -3,8 +3,11 @@
 <!-- Generated with http://android-holo-colors.com -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-  <style name="JianShu" parent="@style/_JianShu">
+  <style name="JianShu.Translucent">
     <item name="android:windowIsTranslucent">true</item>
+  </style>
+
+  <style name="JianShu" parent="@style/_JianShu">
     <item name="android:actionBarItemBackground">@drawable/selectable_background_jianshuactionbar
     </item>
     <item name="android:popupMenuStyle">@style/PopupMenu.Jianshuactionbar</item>

@@ -62,7 +62,6 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
       public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         RecommendationItem item = mAdapter.getItem((int)l);
         Intent intent = new Intent(activity, ArticleActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
         intent.putExtra("url", item.getUrl());
         startActivity(intent);
         activity.overridePendingTransition(R.anim.slide_in_left, 0);

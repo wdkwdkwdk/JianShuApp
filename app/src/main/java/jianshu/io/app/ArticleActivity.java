@@ -106,9 +106,18 @@ public class ArticleActivity extends SwipeBackActivity {
     switch (item.getItemId()) {
       // Respond to the action bar's Up/Home button
       case android.R.id.home:
-        NavUtils.navigateUpFromSameTask(this);
+        Intent intent = NavUtils.getParentActivityIntent(this);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
+        overridePendingTransition(0, R.anim.slide_out_right);
         return true;
     }
     return super.onOptionsItemSelected(item);
+  }
+
+  @Override
+  public void onBackPressed() {
+    finish();
+    overridePendingTransition(0, R.anim.slide_out_right);
   }
 }
