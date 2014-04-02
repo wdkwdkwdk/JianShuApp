@@ -36,6 +36,9 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
   RecommendationAdapter mAdapter;
   LoadingTextView mFooter;
   HomePageDataPool mPool;
+  View mEmptyView;
+  ActionBarPullToRefresh.SetupWizard mWizard;
+  boolean mIsEmpty;
 
   public RecommendationFragment() {
     mPool = new HomePageDataPool();
@@ -53,6 +56,7 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
 
     final Activity activity = getActivity();
 
+    mEmptyView = getActivity().getLayoutInflater().inflate(R.layout.empty_pull, null);
     mListView = (EndlessListView) (activity.findViewById(R.id.list));
     mListView.setListener(this);
     mFooter = (LoadingTextView) activity.getLayoutInflater().inflate(R.layout.footer, null);
@@ -75,10 +79,8 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
     mListView.setAdapter(mAdapter);
 
     mPtrLayout = (PullToRefreshLayout) (activity.findViewById(R.id.ptr_layout));
-    ActionBarPullToRefresh.from(activity)
-        .allChildrenArePullable()
-        .listener(this)
-        .setup(mPtrLayout);
+    mWizard = ActionBarPullToRefresh.from(activity).listener(this);
+    mWizard.allChildrenArePullable().setup(mPtrLayout);
 
     mPtrLayout.setRefreshing(true);
     onRefreshStarted(null);
@@ -124,10 +126,24 @@ public class RecommendationFragment extends Fragment implements OnRefreshListene
       public void run(RecommendationItem[] data) {
         mPtrLayout.setRefreshComplete();
         if(data != null) {
-          mAdapter.clear();
+          if(mIsEmpty) {
+            mIsEmpty = false;
+            mPtrLayout.removeView(mEmptyView);
+            mPtrLayout.addView(mListView);
+            mWizard.allChildrenArePullable().setup(mPtrLayout);}
+
+          else {
+            mAdapter.clear();
+          }
           mAdapter.addAll(data);
         } else {
           Toast.makeText(RecommendationFragment.this.getActivity(), ":( 加载失败，请重试", Toast.LENGTH_LONG).show();
+          if(mAdapter.getCount() == 0 && !mIsEmpty) {
+            mIsEmpty = true;
+            mPtrLayout.removeView(mListView);
+            mPtrLayout.addView(mEmptyView);
+            mWizard.allChildrenArePullable().setup(mPtrLayout);
+          }
         }
       }
     }).execute();
