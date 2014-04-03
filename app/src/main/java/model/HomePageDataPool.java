@@ -43,7 +43,8 @@ public class HomePageDataPool {
       Document doc = Jsoup.parse((String) httpResult);
       Elements loadMoreElements = doc.select(LOAD_MORE_SELECTOR);
       if (loadMoreElements.size() > 0) {
-        mLoadMoreUrl = HOME_PAGE_URL + loadMoreElements.get(0).attr("data-url");
+//        mLoadMoreUrl = HOME_PAGE_URL + loadMoreElements.get(0).attr("data-url");
+        mLoadMoreUrl = getHtmlUrl(loadMoreElements.get(0).attr("data-url"));
       } else {
         mLoadMoreUrl = null;
         mIsAtTheEnd = true;
@@ -67,6 +68,11 @@ public class HomePageDataPool {
 //        .header("Cache-Control", "max-age=0");
 //    Document doc = connection.get();
 
+  }
+
+  private String getHtmlUrl(String url) {
+    String[] fragments = url.split("\\?");
+    return HOME_PAGE_URL + fragments[0] + ".html?" + fragments[1];
   }
 
   public RecommendationItem[] pull() throws IOException {
