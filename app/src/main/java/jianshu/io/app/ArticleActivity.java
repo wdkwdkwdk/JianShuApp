@@ -2,16 +2,24 @@ package jianshu.io.app;
 
 import android.app.ActionBar;
 import android.content.Intent;
-import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.ShareActionProvider;
+
+import net.tsz.afinal.FinalHttp;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import jianshu.io.app.widget.LoadingTextView;
 import me.imid.swipebacklayout.lib.SwipeBackLayout;
@@ -28,8 +36,11 @@ public class ArticleActivity extends SwipeBackActivity {
   private WebView mWebView;
   private Button mRetryButton;
   private SwipeBackLayout mSwipeBackLayout;
+  private FinalHttp mFinalHttp;
   private boolean hasError;
   private ShareActionProvider mShareActionProvider;
+
+  protected static String Css;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -45,56 +56,94 @@ public class ArticleActivity extends SwipeBackActivity {
     mWebView = (WebView)findViewById(R.id.web);
     mRetryButton = (Button)findViewById(R.id.retry);
 
-    mWebView.getSettings().setJavaScriptEnabled(true);
-    mWebView.setWebViewClient(new WebViewClient() {
-      @Override
-      public void onPageStarted(WebView view, String url, Bitmap favicon) {
-        if(hasError) {
-          return;
-        }
-        hasError = false;
-        mLoadingArticle.setVisibility(View.VISIBLE);
-        mLoadingArticle.startAnimation();
-        mWebView.setVisibility(View.INVISIBLE);
-        mRetryButton.setVisibility(View.INVISIBLE);
-      }
-
-      @Override
-      public void onPageFinished(WebView view, String url) {
-        mLoadingArticle.endAnimation();
-        mLoadingArticle.setVisibility(View.INVISIBLE);
-        if(!hasError) {
-          mWebView.setVisibility(View.VISIBLE);
-          mWebView.loadUrl("javascript:$('div.navbar').remove()");
-          mWebView.loadUrl("javascript:$('div.wrap-btn').remove()");
-          mWebView.loadUrl("javascript:$('a.notebooks-menu-btn').remove()");
-          mWebView.loadUrl("javascript:$('div.article').css('margin-top', '0px')");
-          mWebView.loadUrl("javascript:$('div.preview').css('padding-top', '0px')");
-        } else {
-          mRetryButton.setVisibility(View.VISIBLE);
-        }
-      }
-
-      @Override
-      public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-        hasError = true;
-      }
-    });
-    mWebView.loadUrl(mUrl);
-
-    mRetryButton.setOnClickListener(new Button.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        hasError = false;
-        mWebView.loadUrl(mUrl);
-      }
-    });
-
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
+    //滑动返回
     mSwipeBackLayout = getSwipeBackLayout();
     mSwipeBackLayout.setEdgeTrackingEnabled(SwipeBackLayout.EDGE_LEFT);
+
+    mRetryButton.setOnClickListener(new Button.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        mRetryButton.setVisibility(View.INVISIBLE);
+        mLoadingArticle.setVisibility(View.VISIBLE);
+        loadArticle();
+      }
+    });
+
+    mFinalHttp = new FinalHttp();
+
+    loadArticle();
+  }
+
+  private void loadArticle() {
+    mLoadingArticle.startAnimation();
+    (new AsyncTask<Void, Void, String>() {
+      @Override
+      protected String doInBackground(Void... params) {
+        Object httpResult = mFinalHttp.getSync(mUrl);
+        if(httpResult instanceof String) {
+          Document doc = Jsoup.parse((String) httpResult);
+          Element article = doc.select("div.preview").get(0);
+          Element title = article.select("h1.title").get(0);
+          Element content = article.select("div.show-content").get(0);
+          String extractedDocStr = String.format("<html lang=\"zh-CN\">" +
+              "<head>" +
+              "<meta charset=\"utf-8\">" +
+              "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">" +
+              "<style type=\"text/css\">%s</style>" +
+              "</head>" +
+              "<body class=\"post output zh cn reader-day-mode reader-font1  win\">" +
+              "<div class=\"post-bg\">" +
+              "<div class=\"container\">" +
+              "<div class=\"article\">" +
+              "<div class=\"preview\">" +
+              "%s" + "%s" +
+              "</div>" +
+              "</div>" +
+              "</div>" +
+              "</div>" +
+              "</body>" +
+              "</html>",
+              getCss(),
+              title.toString(), content.toString());
+          return extractedDocStr;
+        } else {
+          return null;
+        }
+      }
+
+      @Override
+      protected void onPostExecute(String s) {
+        mLoadingArticle.endAnimation();
+        mLoadingArticle.setVisibility(View.INVISIBLE);
+        if(s != null) {
+          mWebView.setVisibility(View.VISIBLE);
+          mWebView.loadData(s, "text/html; charset=UTF-8", null);
+        } else {
+          mWebView.setVisibility(View.INVISIBLE);
+          mRetryButton.setVisibility(View.VISIBLE);
+        }
+      }
+    }).execute();
+  }
+
+  protected String getCss() {
+    if (Css == null) {
+      try {
+        InputStream stream = getAssets().open("jianshu.css");
+        int size = stream.available();
+        byte[] buffer = new byte[size];
+        stream.read(buffer);
+        stream.close();
+        Css = new String(buffer);
+      } catch (IOException e) {
+        // Handle exceptions here
+      }
+    }
+    return Css;
   }
 
   @Override

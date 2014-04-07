@@ -3,7 +3,6 @@
   <jianshu.io.app.widget.LoadingTextView
       xmlns:android="http://schemas.android.com/apk/res/android"
       android:id="@+id/loading_text"
-      android:text="123"
       android:textSize="20dp"
       android:textColor="@color/jianshu"
       android:gravity="center"
